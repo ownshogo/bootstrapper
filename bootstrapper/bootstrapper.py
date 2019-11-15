@@ -1,0 +1,40 @@
+import numpy
+import joblib
+
+
+class Bootstrapper:
+    def __init__(self, n_jobs=-1, bootstrap_count=128):
+        """Create an instance of Bootstrapper.
+
+        Parameters
+        ----------
+        n_jobs: int
+            How many process workers are used. -1 means the CPU counts available. Default to -1.
+        bootstrap_count: positive int
+            How many bootstrap samples are drawn. Default to 128.
+        """
+        self.n_jobs = n_jobs
+        if bootstrap_count < 1:
+            raise ValueError('bootstrap_count must be positive integer. {} was given.'.format(bootstrap_count))
+        self.bootstrap_count = bootstrap_count
+
+    def run(self, sample, function):
+        """Run bootstrapping process using the given function.
+
+        Parameters
+        ----------
+        sample: numpy 1d array
+            The sample to be bootstrapped.
+        function: callable
+            The function applied to bootstrap sampling. Must take numpy 1d-array as its first argument.
+
+        Returns
+        -------
+        numpy 1d-array
+            The function output applied to each bootstrap sampling.
+        """
+        def bootstrap():
+            bs = numpy.random.choice(sample, sample.size, replace=True)
+            return function(bs)
+
+        return joblib.Parallel(n_jobs=self.n_jobs)(joblib.delayed(bootstrap)() for i in range(self.bootstrap_count))
