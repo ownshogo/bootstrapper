@@ -13,9 +13,11 @@ class Bootstrapper:
         bootstrap_count: positive int
             How many bootstrap samples are drawn. Default to 128.
         """
-        self.n_jobs = n_jobs
-        if bootstrap_count < 1:
+        if type(n_jobs) != int or (n_jobs < 1 and n_jobs != -1):
+            raise ValueError('n_jobs must be positive integer or -1. {} was given'.format(n_jobs))
+        if type(bootstrap_count) != int or bootstrap_count < 1:
             raise ValueError('bootstrap_count must be positive integer. {} was given.'.format(bootstrap_count))
+        self.n_jobs = n_jobs
         self.bootstrap_count = bootstrap_count
 
     def run(self, function, *samples):
