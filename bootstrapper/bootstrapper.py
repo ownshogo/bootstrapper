@@ -42,17 +42,26 @@ class Bootstrapper:
         rtn = joblib.Parallel(n_jobs=self.n_jobs)(joblib.delayed(bootstrap)() for _ in range(self.bootstrap_count))
         return numpy.array(rtn)
 
-    def ci(self, function, confidence_level, *samples):
+    def ci(self, function, confidence_level, method='quantile', *samples):
         """Calculate bootstrap confidence interval.
 
-        :param function: callable
+        Parameters
+        ----------
+        function: callable
             The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.
-        :param confidence_level: float
+        confidence_level: float
             The confidence level of confidence interval. Must be in range (0, 1).
-        :param samples: numpy 1d arrays
+        method: str
+            How to calculate confidence interval. Available values are 'quantile' and 'student'.
+            'quantile' means a simple confidence interval using quantile as plug-in statistics.
+            'student' is also called bootstrap-t, where Student's t statistics is used instead of naive quantile.
+        samples: numpy 1d arrays
             The samples to be bootstrapped.
-        :return: 3-tuple of (float, float, numpy 1d-array)
-            The lower bound, higher bound of confidence interval and bootstrap sample.
+
+        Returns
+        -------
+        Tuple of (float, float, numpy 1d-array)
+            The lower bound, higher bound of confidence interval, and bootstrap sample.
         """
         if confidence_level <= 0 or 1 <= confidence_level:
             raise ValueError('confidence_level must be in range (0, 1). {} was given.'.format(confidence_level))
