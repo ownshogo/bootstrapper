@@ -69,3 +69,27 @@ class Bootstrapper:
         low_quantile = (1 - confidence_level) / 2
         high_quantile = 1 - low_quantile
         return numpy.quantile(bs_samples, low_quantile), numpy.quantile(bs_samples, high_quantile), bs_samples
+
+    def test_mean_diff(self, x, y):
+        """Conduct a hypothesis test of mean difference between two samples.
+        Null hypothesis: mean(x) = mean(y).
+        Alternative hypothesis: mean(x) > mean(y).
+
+        Parameters
+        ----------
+        x, y: numpy 1d array
+           The two samples to test.
+
+        Returns
+        -------
+        p-value, boot_mean_diff
+            The p-value and bootstrap samples of mean differences under null hypothesis mean(x) = mean(y).
+        """
+
+        sample_mean_diff = x.mean() - y.mean()
+        pooled_mean = numpy.concatenate([x, y]).mean()
+        xplus = x - x.mean() + pooled_mean
+        yplus = y - y.mean() + pooled_mean
+        boot_mean_diff = self.run(lambda s1, s2: s1.mean() - s2.mean(), xplus, yplus)
+        pvalue = (boot_mean_diff >= sample_mean_diff).sum() / self.bootstrap_count
+        return pvalue, boot_mean_diff
