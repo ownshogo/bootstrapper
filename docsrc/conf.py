@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Bootstrapper documentation build configuration file, created by
-# sphinx-quickstart on Mon Feb 10 19:29:53 2020.
+# sphinx-quickstart on Mon Feb 10 20:43:41 2020.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -19,8 +19,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
-print(sys.path)
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- General configuration ------------------------------------------------
@@ -73,7 +72,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'

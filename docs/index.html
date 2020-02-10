@@ -1,0 +1,186 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to Bootstrapper’s documentation! &#8212; Bootstrapper 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Bootstrapper 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-bootstrapper-s-documentation">
+<h1>Welcome to Bootstrapper’s documentation!<a class="headerlink" href="#welcome-to-bootstrapper-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="bootstrapper">
+<h1>Bootstrapper<a class="headerlink" href="#bootstrapper" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="bootstrapper.Bootstrapper">
+<em class="property">class </em><code class="descclassname">bootstrapper.</code><code class="descname">Bootstrapper</code><span class="sig-paren">(</span><em>n_jobs=-1</em>, <em>bootstrap_count=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bootstrapper/bootstrapper.html#Bootstrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bootstrapper.Bootstrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>The entry point of all Bootstrapper features.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – How many process workers are used. -1 means the CPU counts available. Defaults to -1.</li>
+<li><strong>bootstrap_count</strong> (<em>int</em><em>, </em><em>optional</em>) – How many bootstrap samples are drawn. Defaults to 10_000.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – When n_jobs is not positive integer or -1.</li>
+<li><strong>ValueError</strong> – When bootstrap_count is not positive integer.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="bootstrapper.Bootstrapper.ci">
+<code class="descname">ci</code><span class="sig-paren">(</span><em>function</em>, <em>confidence_level</em>, <em>*samples</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bootstrapper/bootstrapper.html#Bootstrapper.ci"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bootstrapper.Bootstrapper.ci" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate bootstrap confidence interval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> (<em>callable</em>) – The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.</li>
+<li><strong>confidence_level</strong> (<em>float</em>) – The confidence level of confidence interval. Must be in range (0, 1).</li>
+<li><strong>samples</strong> (<em>numpy 1d arrays</em>) – The samples to be bootstrapped.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The lower bound, higher bound of confidence interval, and bootstrap sample.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(float, float, numpy 1d-array)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bootstrapper.Bootstrapper.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>function</em>, <em>*samples</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bootstrapper/bootstrapper.html#Bootstrapper.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bootstrapper.Bootstrapper.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run bootstrapping process using the given function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> (<em>callable</em>) – The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.</li>
+<li><strong>samples</strong> (<em>numpy 1d arrays</em>) – The samples to be bootstrapped.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The function output applied to each bootstrap sampling.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">numpy 1d array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bootstrapper.Bootstrapper.test_mean_diff">
+<code class="descname">test_mean_diff</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bootstrapper/bootstrapper.html#Bootstrapper.test_mean_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bootstrapper.Bootstrapper.test_mean_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conduct a hypothesis test of mean difference between two samples.
+Null hypothesis: <span class="math">\(\mu_x = \mu_y\)</span>.
+Alternative hypothesis: <span class="math">\(\mu_x &gt; \mu_y\)</span>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>numpy 1d array</em>) – One of the two samples to test.</li>
+<li><strong>y</strong> (<em>numpy 1d array</em>) – Another of the two samples to test.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The p-value and bootstrap samples of mean differences under null hypothesis <span class="math">\(\mu_x = \mu_y\)</span></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(float, numpy 1d array)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Bootstrapper 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Shogo Osawa.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+    </div>
+  </body>
+</html>
