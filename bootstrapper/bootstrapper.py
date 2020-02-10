@@ -3,16 +3,18 @@ import joblib
 
 
 class Bootstrapper:
-    def __init__(self, n_jobs=-1, bootstrap_count=128):
-        """Create an instance of Bootstrapper.
+    """The entry point of all Bootstrapper features.
 
-        Parameters
-        ----------
-        n_jobs: int
-            How many process workers are used. -1 means the CPU counts available. Default to -1.
-        bootstrap_count: positive int
-            How many bootstrap samples are drawn. Default to 128.
-        """
+    :param n_jobs: How many process workers are used. -1 means the CPU counts available. Defaults to -1.
+    :type n_jobs: int, optional
+
+    :param bootstrap_count: How many bootstrap samples are drawn. Defaults to 10_000.
+    :type bootstrap_count: int, optional
+
+    :raise ValueError: When n_jobs is not positive integer or -1.
+    :raise ValueError: When bootstrap_count is not positive integer.
+    """
+    def __init__(self, n_jobs=-1, bootstrap_count=10_000):
         if type(n_jobs) != int or (n_jobs < 1 and n_jobs != -1):
             raise ValueError('n_jobs must be positive integer or -1. {} was given'.format(n_jobs))
         if type(bootstrap_count) != int or bootstrap_count < 1:
@@ -23,17 +25,14 @@ class Bootstrapper:
     def run(self, function, *samples):
         """Run bootstrapping process using the given function.
 
-        Parameters
-        ----------
-        function: callable
-            The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.
-        samples: numpy 1d arrays
-            The samples to be bootstrapped.
+        :param function: The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.
+        :type function: callable
 
-        Returns
-        -------
-        numpy 1d-array
-            The function output applied to each bootstrap sampling.
+        :param samples: The samples to be bootstrapped.
+        :type samples: numpy 1d arrays
+
+        :return: The function output applied to each bootstrap sampling.
+        :rtype: numpy 1d array
         """
         def bootstrap():
             bs = [numpy.random.choice(s, s.size, replace=True) for s in samples]
@@ -42,26 +41,20 @@ class Bootstrapper:
         rtn = joblib.Parallel(n_jobs=self.n_jobs)(joblib.delayed(bootstrap)() for _ in range(self.bootstrap_count))
         return numpy.array(rtn)
 
-    def ci(self, function, confidence_level, method='quantile', *samples):
+    def ci(self, function, confidence_level, *samples):
         """Calculate bootstrap confidence interval.
 
-        Parameters
-        ----------
-        function: callable
-            The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.
-        confidence_level: float
-            The confidence level of confidence interval. Must be in range (0, 1).
-        method: str
-            How to calculate confidence interval. Available values are 'quantile' and 'student'.
-            'quantile' means a simple confidence interval using quantile as plug-in statistics.
-            'student' is also called bootstrap-t, where Student's t statistics is used instead of naive quantile.
-        samples: numpy 1d arrays
-            The samples to be bootstrapped.
+        :param function: The function applied to bootstrap sampling. Must take numpy 1d-arrays as its vararg.
+        :type function: callable
 
-        Returns
-        -------
-        Tuple of (float, float, numpy 1d-array)
-            The lower bound, higher bound of confidence interval, and bootstrap sample.
+        :param confidence_level: The confidence level of confidence interval. Must be in range (0, 1).
+        :type confidence_level: float
+
+        :param samples: The samples to be bootstrapped.
+        :type samples: numpy 1d arrays
+
+        :return: The lower bound, higher bound of confidence interval, and bootstrap sample.
+        :rtype: (float, float, numpy 1d-array)
         """
         if confidence_level <= 0 or 1 <= confidence_level:
             raise ValueError('confidence_level must be in range (0, 1). {} was given.'.format(confidence_level))
@@ -72,18 +65,17 @@ class Bootstrapper:
 
     def test_mean_diff(self, x, y):
         """Conduct a hypothesis test of mean difference between two samples.
-        Null hypothesis: mean(x) = mean(y).
-        Alternative hypothesis: mean(x) > mean(y).
+        Null hypothesis: :math:`\\mu_x = \\mu_y`.
+        Alternative hypothesis: :math:`\\mu_x > \\mu_y`.
 
-        Parameters
-        ----------
-        x, y: numpy 1d array
-           The two samples to test.
+        :param x: One of the two samples to test.
+        :type x: numpy 1d array
 
-        Returns
-        -------
-        p-value, boot_mean_diff
-            The p-value and bootstrap samples of mean differences under null hypothesis mean(x) = mean(y).
+        :param y: Another of the two samples to test.
+        :type y: numpy 1d array
+
+        :return: The p-value and bootstrap samples of mean differences under null hypothesis :math:`\\mu_x = \\mu_y`
+        :rtype: (float, numpy 1d array)
         """
 
         sample_mean_diff = x.mean() - y.mean()
